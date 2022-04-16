@@ -31,7 +31,7 @@ const setDocumentTheme = (dark: boolean) => {
 };
 
 const getDarkCookie = (cookie?: string) => {
-  const parsed = parse(cookie);
+  const parsed = typeof cookie === "string" ? parse(cookie) : {};
   if (typeof cookie === "string") {
     try {
       const dark = parsed["dark"];
