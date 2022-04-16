@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply text-black bg-white;
+    @apply dark:text-white dark:bg-black;
+  }
+}
+
+/* Custom GlobalScroll Bar */
+
+::-webkit-scrollbar {
+  @apply w-3;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-neutral-300 rounded-3xl;
+  @apply dark:bg-neutral-600;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-400 hover:bg-neutral-500 rounded-3xl;
+  @apply dark:bg-neutral-500 dark:hover:bg-neutral-400;
+}
+
+/* Component */
+
+.play-container {
+  @apply container flex flex-col max-w-[128rem] mx-auto w-full h-screen bg-neutral-100 overflow-hidden;
+  @apply dark:bg-neutral-900;
+}
+
+.play-header {
+  @apply flex items-center justify-between h-16 pl-6 pr-4 bg-white border-2 border-transparent shrink-0 border-b-primary-400;
+  @apply dark:bg-neutral-800 dark:border-b-primary-500;
+}
+
+.play-header-side {
+  @apply flex items-center space-x-4;
+}
+
+.play-main {
+  @apply flex justify-between flex-grow overflow-hidden;
+}
+
+.play-main-panel {
+  @apply w-1/2 h-full overflow-auto bg-neutral-100 dark:bg-neutral-800 shrink-0;
+}

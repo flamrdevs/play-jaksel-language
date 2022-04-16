@@ -1,0 +1,56 @@
+{
+  "name": "play-jaksel-language",
+  "version": "1.0.0-beta",
+  "description": "jaksel language playground",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flamrdevs/play-jaksel-language.git"
+  },
+  "keywords": [
+    "jaksel-language"
+  ],
+  "author": "flamrdevs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flamrdevs/play-jaksel-language/issues"
+  },
+  "homepage": "https://github.com/flamrdevs/play-jaksel-language#readme",
+  "dependencies": {
+    "@codemirror/basic-setup": "^0.19.3",
+    "@codemirror/commands": "^0.19.8",
+    "@codemirror/lang-javascript": "^0.19.7",
+    "@codemirror/state": "^0.19.9",
+    "@codemirror/text": "^0.19.6",
+    "@codemirror/view": "^0.19.48",
+    "@headlessui/react": "^1.5.0",
+    "@radix-ui/react-icons": "^1.1.0",
+    "classnames": "^2.3.1",
+    "cookie": "^0.5.0",
+    "js-cookie": "^3.0.1",
+    "nanoid": "^3.3.2",
+    "next": "^12.1.5",
+    "prettier": "^2.6.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "usehooks-ts": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.5.0",
+    "@types/js-cookie": "^3.0.1",
+    "@types/node": "^17.0.24",
+    "@types/prettier": "^2.6.0",
+    "@types/react": "^18.0.5",
+    "@types/react-dom": "^18.0.1",
+    "autoprefixer": "^10.4.4",
+    "postcss": "^8.4.12",
+    "tailwindcss": "^3.0.24",
+    "typescript": "^4.6.3"
+  }
+}
