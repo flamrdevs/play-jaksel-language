@@ -113,11 +113,14 @@ const RightSideHeader = () => {
                     <Badge>beta</Badge>
                   </div>
                 </Dialog.Title>
-                <Dialog.Description className="my-4 text-base">
+                <Dialog.Description className="my-4 text-lg">
                   <div>Browser based - jaksel language code editor</div>
-                  <div>jaksel language versi 1.0.8</div>
-
-                  <div></div>
+                  <a
+                    href={links.github.jakSelLanguage}
+                    className="text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400"
+                  >
+                    jaksel language version 1.0.1
+                  </a>
                 </Dialog.Description>
 
                 <div className="flex justify-end mt-8">
