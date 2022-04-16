@@ -27,7 +27,7 @@ const Badge = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) =>
 const LeftSideHeader = () => {
   return (
     <a href="/" className="flex items-center space-x-4">
-      {/* <img src="/favicon.ico" className="w-8 h-8 bg-center bg-cover rounded-xl" alt="JakSel Lang Logo" /> */}
+      <img src="/unstable-jaksel-lang-logo.png" className="w-8 h-8 bg-center bg-cover rounded" alt="JakSel Lang Logo" />
       <span className="self-center text-xl font-bold whitespace-nowrap">{process.env.NEXT_PUBLIC_APP_NAME.toLowerCase()}</span>
       <div>
         <Badge>beta</Badge>
@@ -108,19 +108,23 @@ const RightSideHeader = () => {
             >
               <div className="relative w-full max-w-xl p-6 mx-auto my-8 bg-white rounded-xl dark:bg-black">
                 <Dialog.Title className="flex items-center space-x-4 text-xl font-bold">
+                  <img src="/unstable-jaksel-lang-logo.png" className="w-8 h-8 bg-center bg-cover rounded" alt="JakSel Lang Logo" />
                   <span>{process.env.NEXT_PUBLIC_APP_NAME.toLowerCase()}</span>
                   <div>
                     <Badge>beta</Badge>
                   </div>
                 </Dialog.Title>
                 <Dialog.Description className="my-4 text-lg">
-                  <div>Browser based - jaksel language code editor</div>
-                  <a
-                    href={links.github.jakSelLanguage}
-                    className="text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400"
-                  >
-                    jaksel language version 1.0.1
-                  </a>
+                  <div>Jaksel-lang Online Compiler & Interpreter</div>
+                  <div>
+                    powered by{" "}
+                    <a
+                      href={links.github.jakSelLanguage}
+                      className="text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400"
+                    >
+                      jaksel-language@1.0.2
+                    </a>
+                  </div>
                 </Dialog.Description>
 
                 <div className="flex justify-end mt-8">
@@ -144,7 +148,7 @@ const RightSideHeader = () => {
 const LeftPanelMain = () => {
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="px-4 py-1.5 w-full shrink-0 text-lg font-medium">main.jaksel</div>
+      <div className="px-4 py-1.5 w-full shrink-0 text-lg font-medium pointer-events-none select-none">main.jaksel</div>
       <div className="flex-grow w-full overflow-auto">
         <JakSelCodeEditor />
       </div>
@@ -155,7 +159,7 @@ const LeftPanelMain = () => {
 const RightPanelMain = () => {
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="px-4 py-1.5 w-full shrink-0 text-lg font-medium">main.js</div>
+      <div className="px-4 py-1.5 w-full shrink-0 text-lg font-medium pointer-events-none select-none">main.js</div>
       <div className="flex-grow w-full overflow-auto">
         <JavaScriptCodePreview />
       </div>

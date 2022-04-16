@@ -1,8 +1,8 @@
-# play-jaksel-language
+# play-jaksel-language (beta)
 
-## Browser based - jaksel language code editor (beta)
+## Jaksel-lang Online Compiler & Interpreter
 
-Powered by [jaksel language - version 1.0.1](https://github.com/RioChndr/jaksel-language)
+Powered by [jaksel-language@1.0.2](https://github.com/RioChndr/jaksel-language)
 
 ## Demo
 

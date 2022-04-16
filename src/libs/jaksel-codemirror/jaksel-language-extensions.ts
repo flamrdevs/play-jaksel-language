@@ -47,6 +47,9 @@ const colors = {
     colorBase: cssVar.neutral[900],
     primary: cssVar.primary[500],
 
+    white: cssVar.neutral[50],
+    black: cssVar.neutral[900],
+
     darkBackground: cssVar.neutral[900],
     highlightBackground: cssVar.neutral[900],
     selection: cssVar.neutral[400],
@@ -55,6 +58,9 @@ const colors = {
     backgroundColorBase: cssVar.neutral[900],
     colorBase: cssVar.neutral[50],
     primary: cssVar.primary[400],
+
+    white: cssVar.neutral[900],
+    black: cssVar.neutral[50],
 
     darkBackground: cssVar.neutral[50],
     highlightBackground: cssVar.neutral[50],
@@ -105,10 +111,10 @@ const jakselLanguageLightTheme = (() => {
     },
 
     ".cm-content": {
-      caretColor: color.primary,
+      caretColor: color.black,
     },
 
-    ".cm-cursor, .cm-dropCursor": { borderLeftColor: color.primary },
+    ".cm-cursor, .cm-dropCursor": { borderLeftColor: color.black },
     "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection": { backgroundColor: color.selection },
 
     ".cm-panels": { backgroundColor: color.darkBackground, color: color.colorBase },
@@ -157,10 +163,10 @@ const jakselLanguageDarkTheme = (() => {
     },
 
     ".cm-content": {
-      caretColor: color.primary,
+      caretColor: color.black,
     },
 
-    ".cm-cursor, .cm-dropCursor": { borderLeftColor: color.primary },
+    ".cm-cursor, .cm-dropCursor": { borderLeftColor: color.black },
     "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection": { backgroundColor: color.selection },
 
     ".cm-panels": { backgroundColor: color.darkBackground, color: color.colorBase },
