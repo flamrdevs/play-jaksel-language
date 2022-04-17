@@ -216,7 +216,7 @@ const RightPanelMain = () => {
       <div className="flex w-full gap-3 px-4 py-2 text-lg font-medium shrink-0">
         <button className="px-2 shrink-0 flex items-center justify-center gap-2 py-0.5 border-2 border-transparent border-b-primary-400 dark:border-b-primary-500 focus:outline-none">
           <FileIcon className="w-4 h-4" />
-          {file.name.replaceAll(".jaksel", ".js")}
+          {file.name.replace(/.jaksel/g, ".js")}
         </button>
       </div>
       <div className="flex-grow w-full overflow-auto">
