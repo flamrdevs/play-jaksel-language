@@ -1,7 +1,5 @@
 import { useMemo } from "react";
 
-import { useDebounce } from "usehooks-ts";
-
 // import { format } from "prettier/standalone";
 // import babelParser from "prettier/parser-babel";
 
@@ -12,30 +10,25 @@ import JavascriptCodemirror from "~/libs/javascript-codemirror";
 import { compile } from "~/libs/jaksel-language";
 import { useRandomValueEffect } from "~/libs/hooks";
 
-// const formatJavascript = (input: string) => {
-//   return format(input, { parser: "babel", plugins: [babelParser] });
-// };
+// const formatJavascript = (input: string) => format(input, { parser: "babel", plugins: [babelParser] });
 
 type JavaScriptCodePreviewProps = {};
 
 function JavaScriptCodePreview(props: JavaScriptCodePreviewProps) {
   const { dark } = useThemeContext();
-  const { value } = useAppContext();
-
-  const debouncedValue = useDebounce<string>(value, 100);
+  const { file, fileDataSync } = useAppContext();
 
   const compiled = useMemo(() => {
-    const js = compile(debouncedValue);
+    const js = compile(fileDataSync);
     return js;
     // try {
-    //   return js;
-    //   // return formatJavascript(js);
+    //   return formatJavascript(js);
     // } catch (error) {
     //   return js;
     // }
-  }, [debouncedValue]);
+  }, [fileDataSync]);
 
-  const forceUpdate = useRandomValueEffect([compiled, dark]);
+  const forceUpdate = useRandomValueEffect([dark, file, compiled]);
 
   return (
     <JavascriptCodemirror

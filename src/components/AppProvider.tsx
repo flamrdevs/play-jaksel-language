@@ -1,14 +1,34 @@
 import { createContext, useContext, useState } from "react";
 import type { PropsWithChildren } from "react";
 
+import { useUpdateEffect } from "usehooks-ts";
+
+import { files, type FileObject } from "~/static/files";
+
 type AppContextType = {
-  value: string;
-  setValue: (value: string) => void;
+  file: FileObject;
+  setFile: (file: FileObject) => void;
+  setFileByName: (name: FileObject["name"]) => void;
+
+  // Unstable
+  fileDataSync: string;
+  setFileDataSync: (data: string) => void;
 };
 
+const initialFile = files.fileHelloWorld;
+
 const AppContext = createContext<AppContextType>({
-  value: "",
-  setValue: () => {
+  file: initialFile,
+  setFile: () => {
+    throw new Error("Unimplemented");
+  },
+  setFileByName: () => {
+    throw new Error("Unimplemented");
+  },
+
+  // Unstable
+  fileDataSync: "",
+  setFileDataSync: () => {
     throw new Error("Unimplemented");
   },
 });
@@ -17,28 +37,35 @@ function useAppContext() {
   return useContext(AppContext);
 }
 
-const initialValue = `
-literally umur itu 21
-spill "Umur lu " + umur
-kalo umur lebih gede 20
-  spill "Elu tua"
-  literally umurgua itu umur + 10
-  spill "Kalo gua umurnya " + umurgua
-  kalo umurgua lebih gede 30
-    spill "gua lebih tua"
-  udahan
-kalogak
-  spill "dasar bocil"
-udahan
-spill "Udahan ah"
-`;
-
 type AppProviderProps = PropsWithChildren<{}>;
 
 function AppProvider(props: AppProviderProps) {
-  const [value, setValue] = useState<string>(initialValue);
+  const [file, setFile] = useState<FileObject>(initialFile);
+  const [fileDataSync, setFileDataSync] = useState<string>(file.data);
 
-  return <AppContext.Provider value={{ value, setValue }} children={props.children} />;
+  const setFileByName = (name: FileObject["name"]) => {
+    const found = Object.values(files).find((file) => file.name === name);
+    if (found) {
+      setFile(found);
+    }
+  };
+
+  useUpdateEffect(() => {
+    setFileDataSync(file.data);
+  }, [file]);
+
+  return (
+    <AppContext.Provider
+      value={{
+        file,
+        fileDataSync,
+        setFile,
+        setFileByName,
+        setFileDataSync,
+      }}
+      children={props.children}
+    />
+  );
 }
 
 export type { AppContextType };

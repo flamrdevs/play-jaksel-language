@@ -8,16 +8,16 @@ type JakSelCodeEditorProps = {};
 
 function JakSelCodeEditor(props: JakSelCodeEditorProps) {
   const { dark } = useThemeContext();
-  const { value, setValue } = useAppContext();
+  const { file, setFileDataSync } = useAppContext();
 
-  const forceUpdate = useRandomValueEffect([dark]);
+  const forceUpdate = useRandomValueEffect([dark, file]);
 
   return (
     <JakselCodemirror
       dark={dark}
-      value={value}
+      value={file.data}
       forceUpdate={forceUpdate}
-      onChange={setValue}
+      onChange={setFileDataSync}
       containerProps={{ className: "w-full h-full" }}
     />
   );

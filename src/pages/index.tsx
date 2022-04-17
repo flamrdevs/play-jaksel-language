@@ -1,12 +1,15 @@
-import React, { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { GitHubLogoIcon, InfoCircledIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { useIsomorphicLayoutEffect } from "usehooks-ts";
+
+import { FileIcon, GitHubLogoIcon, InfoCircledIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 import { Container, Header, IconButton, IconButtonLink, JakSelCodeEditor, JavaScriptCodePreview, Main } from "~/components";
 
 import { useThemeContext } from "~/components/ThemeProvider";
-import { useIsomorphicLayoutEffect } from "usehooks-ts";
+import { useAppContext } from "~/components/AppProvider";
+import { files } from "~/static/files";
 
 const links = {
   github: {
@@ -69,6 +72,16 @@ const RightSideHeader = () => {
   return (
     <Fragment>
       <div className="flex items-center space-x-2">
+        <div>
+          Powered by{" "}
+          <a
+            href={links.github.jakSelLanguage}
+            className="text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400"
+          >
+            jaksel-language@1.0.2
+          </a>
+        </div>
+
         <IconButtonLink href={links.github.playJakSelLanguage}>
           <GitHubLogoIcon className="w-6 h-6" />
         </IconButtonLink>
@@ -94,7 +107,7 @@ const RightSideHeader = () => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70" />
+              <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60" />
             </Transition.Child>
 
             <Transition.Child
@@ -106,7 +119,7 @@ const RightSideHeader = () => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative w-full max-w-xl p-6 mx-auto my-8 bg-white rounded-xl dark:bg-black">
+              <div className="relative w-full max-w-xl p-6 mx-auto my-8 bg-white bg-opacity-70 rounded-xl dark:bg-black dark:bg-opacity-50 backdrop-blur-md">
                 <Dialog.Title className="flex items-center space-x-4 text-xl font-bold">
                   <img src="/unstable-jaksel-lang-logo.png" className="w-8 h-8 bg-center bg-cover rounded" alt="JakSel Lang Logo" />
                   <span>{process.env.NEXT_PUBLIC_APP_NAME.toLowerCase()}</span>
@@ -117,7 +130,7 @@ const RightSideHeader = () => {
                 <Dialog.Description className="my-4 text-lg">
                   <div>Jaksel-lang Online Compiler & Interpreter</div>
                   <div>
-                    powered by{" "}
+                    Powered by{" "}
                     <a
                       href={links.github.jakSelLanguage}
                       className="text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400"
@@ -146,9 +159,28 @@ const RightSideHeader = () => {
 };
 
 const LeftPanelMain = () => {
+  const { file, setFileByName } = useAppContext();
+
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="px-4 py-1.5 w-full shrink-0 text-lg font-medium pointer-events-none select-none">main.jaksel</div>
+      <div className="flex w-full gap-3 px-4 py-2 text-lg font-medium shrink-0">
+        {Object.values(files).map((_file) => {
+          return (
+            <button
+              key={_file.name}
+              className={`px-2 shrink-0 flex items-center justify-center gap-2 py-0.5 border-2 border-transparent focus:outline-none ${
+                file.name === _file.name ? "border-b-primary-400 dark:border-b-primary-500" : ""
+              }`}
+              onClick={() => {
+                setFileByName(_file.name);
+              }}
+            >
+              <FileIcon className="w-4 h-4" />
+              {_file.name}
+            </button>
+          );
+        })}
+      </div>
       <div className="flex-grow w-full overflow-auto">
         <JakSelCodeEditor />
       </div>
@@ -157,9 +189,16 @@ const LeftPanelMain = () => {
 };
 
 const RightPanelMain = () => {
+  const { file } = useAppContext();
+
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="px-4 py-1.5 w-full shrink-0 text-lg font-medium pointer-events-none select-none">main.js</div>
+      <div className="flex w-full gap-3 px-4 py-2 text-lg font-medium shrink-0">
+        <button className="px-2 shrink-0 flex items-center justify-center gap-2 py-0.5 border-2 border-transparent border-b-primary-400 dark:border-b-primary-500 focus:outline-none">
+          <FileIcon className="w-4 h-4" />
+          {file.name}
+        </button>
+      </div>
       <div className="flex-grow w-full overflow-auto">
         <JavaScriptCodePreview />
       </div>
