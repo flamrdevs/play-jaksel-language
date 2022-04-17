@@ -1,9 +1,11 @@
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useRef, useState } from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
 import { useIsomorphicLayoutEffect } from "usehooks-ts";
 
 import { FileIcon, GitHubLogoIcon, InfoCircledIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
+
+import dayjs from "dayjs";
 
 import { Container, Header, IconButton, IconButtonLink, JakSelCodeEditor, JavaScriptCodePreview, Main } from "~/components";
 
@@ -29,7 +31,10 @@ const Badge = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) =>
 
 const LeftSideHeader = () => {
   return (
-    <a href="/" className="flex items-center space-x-4">
+    <a
+      href="/"
+      className="flex items-center p-2 space-x-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 rounded-xl"
+    >
       <img src="/unstable-jaksel-lang-logo.png" className="w-8 h-8 bg-center bg-cover rounded" alt="JakSel Lang Logo" />
       <span className="self-center text-xl font-bold whitespace-nowrap">{process.env.NEXT_PUBLIC_APP_NAME.toLowerCase()}</span>
       <div>
@@ -44,13 +49,24 @@ const RightSideHeader = () => {
 
   const [dialog, setDialog] = useState(false);
 
+  let enjoyRef = useRef<HTMLButtonElement | null>(null);
+
   useIsomorphicLayoutEffect(() => {
-    const KEY = "info";
+    const KEY = "jaksel-language-play-dialog";
+
+    const reWriteDate = () => {
+      setDialog(true);
+      localStorage.setItem(KEY, JSON.stringify(new Date()));
+    };
 
     try {
-      if (!Boolean(JSON.parse(localStorage.getItem(KEY)))) {
-        setDialog(true);
-        localStorage.setItem(KEY, JSON.stringify(true));
+      const value = JSON.parse(localStorage.getItem(KEY));
+
+      if (value) {
+        const day = dayjs(value);
+        if (day.isValid() && /* is different day */ dayjs().format("DD") !== day.format("DD")) reWriteDate();
+      } else {
+        reWriteDate();
       }
     } catch (error) {
       console.error("LocalStorage error");
@@ -65,9 +81,12 @@ const RightSideHeader = () => {
     setDialog(false);
   };
 
-  const SunOrMoonIcon = useCallback((props: { className: string }) => {
-    return dark ? <SunIcon className={props.className} /> : <MoonIcon className={props.className} />;
-  }, []);
+  const SunOrMoonIcon = useCallback(
+    (props: { className?: string }) => {
+      return dark ? <SunIcon className={props.className} /> : <MoonIcon className={props.className} />;
+    },
+    [dark]
+  );
 
   return (
     <Fragment>
@@ -76,7 +95,7 @@ const RightSideHeader = () => {
           Powered by{" "}
           <a
             href={links.github.jakSelLanguage}
-            className="text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400"
+            className="px-1.5 py-0.5 text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 rounded-xl"
           >
             jaksel-language@1.0.2
           </a>
@@ -96,7 +115,7 @@ const RightSideHeader = () => {
       </div>
 
       <Transition show={dialog} as={Fragment}>
-        <Dialog onClose={closeDialog} className="fixed inset-0 z-10 overflow-y-auto">
+        <Dialog initialFocus={enjoyRef} onClose={closeDialog} className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen">
             <Transition.Child
               as={Fragment}
@@ -119,7 +138,7 @@ const RightSideHeader = () => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative w-full max-w-xl p-6 mx-auto my-8 bg-white bg-opacity-70 rounded-xl dark:bg-black dark:bg-opacity-50 backdrop-blur-md">
+              <div className="relative w-full max-w-xl p-6 mx-auto my-8 bg-white border-2 border-neutral-100 bg-opacity-70 rounded-xl dark:bg-black dark:bg-opacity-50 backdrop-blur-md dark:border-neutral-800">
                 <Dialog.Title className="flex items-center space-x-4 text-xl font-bold">
                   <img src="/unstable-jaksel-lang-logo.png" className="w-8 h-8 bg-center bg-cover rounded" alt="JakSel Lang Logo" />
                   <span>{process.env.NEXT_PUBLIC_APP_NAME.toLowerCase()}</span>
@@ -133,7 +152,7 @@ const RightSideHeader = () => {
                     Powered by{" "}
                     <a
                       href={links.github.jakSelLanguage}
-                      className="text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400"
+                      className="px-1.5 py-0.5 text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 rounded-xl"
                     >
                       jaksel-language@1.0.2
                     </a>
@@ -142,6 +161,7 @@ const RightSideHeader = () => {
 
                 <div className="flex justify-end mt-8">
                   <button
+                    ref={enjoyRef}
                     type="button"
                     className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white transition-colors bg-primary-500 hover:bg-primary-600 dark:hover:bg-primary-400 dark:bg-primary-500 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400"
                     onClick={closeDialog}
@@ -196,7 +216,7 @@ const RightPanelMain = () => {
       <div className="flex w-full gap-3 px-4 py-2 text-lg font-medium shrink-0">
         <button className="px-2 shrink-0 flex items-center justify-center gap-2 py-0.5 border-2 border-transparent border-b-primary-400 dark:border-b-primary-500 focus:outline-none">
           <FileIcon className="w-4 h-4" />
-          {file.name}
+          {file.name.replaceAll(".jaksel", ".js")}
         </button>
       </div>
       <div className="flex-grow w-full overflow-auto">
