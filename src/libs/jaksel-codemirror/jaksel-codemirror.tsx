@@ -1,6 +1,6 @@
-import jakselLanguageTheme from "./jaksel-language-theme";
+// import { JakSel } from "./lang-jaksel-alternative";
 
-import { JakSel } from "./lang-jaksel-alternative";
+import { jakselLanguageTheme, jakselLanguageHighlight } from "./jaksel-language-extensions";
 
 import type { SimpleReactCodeMirrorProps } from "../simple-react-codemirror";
 import SimpleReactCodeMirrorDynamic from "../simple-react-codemirror-dynamic";
@@ -14,7 +14,7 @@ function JakSelCodeMirror(props: JakSelCodeMirrorProps) {
     <SimpleReactCodeMirrorDynamic
       value={value}
       forceUpdate={forceUpdate}
-      extensions={[jakselLanguageTheme(dark), JakSel()]}
+      extensions={[jakselLanguageTheme(dark), jakselLanguageHighlight]}
       options={options}
       onChange={onChange}
       containerProps={containerProps}

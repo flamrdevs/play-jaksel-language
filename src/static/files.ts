@@ -1,32 +1,23 @@
-import { nanoid } from "nanoid";
-
-type FileType = {
-  id: string;
-  name: string;
-  ext: string;
+type FileObject = {
+  name: "hello-world.jaksel" | "example.jaksel" | "another.jaksel";
   data: string;
 };
 
-const FILES: FileType[] = [
-  {
-    id: nanoid(),
-    name: "hello-world",
-    ext: ".jaksel",
-    data: `spill "Hello, World!"`,
-  },
-  {
-    id: nanoid(),
-    name: "example",
-    ext: ".jaksel",
-    data: `literally language itu 'javascript'
+const fileHelloWorld: FileObject = {
+  name: "hello-world.jaksel",
+  data: `spill "Hello, World!"`,
+};
+
+const fileExample: FileObject = {
+  name: "example.jaksel",
+  data: `literally language itu 'javascript'
 whichis language itu 'jaksel'
 spill language`,
-  },
-  {
-    id: nanoid(),
-    name: "another",
-    ext: ".jaksel",
-    data: `trust issue
+};
+
+const fileAnother: FileObject = {
+  name: "another.jaksel",
+  data: `trust issue
   spill "Something wrong"
   toxic "Error message"
 backstab
@@ -34,18 +25,13 @@ backstab
 yaudahlahya
   spill "finish finally"
 udahan`,
-  },
-];
-
-const createFile = (): FileType => {
-  return {
-    id: nanoid(),
-    name: "new file",
-    ext: ".jaksel",
-    data: "",
-  };
 };
 
-export type { FileType };
-export { createFile };
-export default FILES;
+const files = {
+  fileHelloWorld,
+  fileExample,
+  fileAnother,
+};
+
+export type { FileObject };
+export { files };

@@ -1,122 +1,73 @@
-// import { createContext, useContext, useState } from "react";
-// import type { PropsWithChildren } from "react";
+import { createContext, useContext, useState } from "react";
+import type { PropsWithChildren } from "react";
 
-// import { useUpdateEffect } from "usehooks-ts";
+import { useUpdateEffect } from "usehooks-ts";
 
-// import FILES, { createFile, type FileType } from "~/static/files";
+import { files, type FileObject } from "~/static/files";
 
-// type AppContextType = {
-//   files: FileType[];
-//   addFile: () => void;
-//   updateFileDataById: (id: string, data: string) => void;
-//   removeFileById: (id: string) => void;
+type AppContextType = {
+  file: FileObject;
+  setFile: (file: FileObject) => void;
+  setFileByName: (name: FileObject["name"]) => void;
 
-//   // Unstable
-//   active: FileType;
-//   setActive: (active: FileType) => void;
-//   updateActiveData: (data: string) => void;
-// };
+  // Unstable
+  fileDataSync: string;
+  setFileDataSync: (data: string) => void;
+};
 
-// const AppContext = createContext<AppContextType>({
-//   files: FILES,
-//   addFile: () => {
-//     throw new Error("Unimplemented");
-//   },
-//   updateFileDataById: () => {
-//     throw new Error("Unimplemented");
-//   },
-//   removeFileById: () => {
-//     throw new Error("Unimplemented");
-//   },
+const initialFile = files.fileHelloWorld;
 
-//   // Unstable
-//   active: FILES[0],
-//   setActive: () => {
-//     throw new Error("Unimplemented");
-//   },
-//   updateActiveData: () => {
-//     throw new Error("Unimplemented");
-//   },
-// });
+const AppContext = createContext<AppContextType>({
+  file: initialFile,
+  setFile: () => {
+    throw new Error("Unimplemented");
+  },
+  setFileByName: () => {
+    throw new Error("Unimplemented");
+  },
 
-// function useAppContext() {
-//   return useContext(AppContext);
-// }
+  // Unstable
+  fileDataSync: "",
+  setFileDataSync: () => {
+    throw new Error("Unimplemented");
+  },
+});
 
-// type AppProviderProps = PropsWithChildren<{}>;
+function useAppContext() {
+  return useContext(AppContext);
+}
 
-// function AppProvider(props: AppProviderProps) {
-//   const [files, setFiles] = useState<FileType[]>(FILES);
-//   const [active, setActive] = useState<FileType>(files[0]);
+type AppProviderProps = PropsWithChildren<{}>;
 
-//   const addFile = () => {
-//     setFiles(files.concat([createFile()]));
-//   };
+function AppProvider(props: AppProviderProps) {
+  const [file, setFile] = useState<FileObject>(initialFile);
+  const [fileDataSync, setFileDataSync] = useState<string>(file.data);
 
-//   const updateFileDataById = (searchId: string, newData: string) => {
-//     setFiles(
-//       files.map(({ data, ...file }) => {
-//         return file.id === searchId ? { ...file, data: newData } : { ...file, data };
-//       })
-//     );
-//   };
+  const setFileByName = (name: FileObject["name"]) => {
+    const found = Object.values(files).find((file) => file.name === name);
+    if (found) {
+      setFile(found);
+    }
+  };
 
-//   const removeFileById = (searchId: string) => {
-//     let removedId = "";
-//     let removedIndex = -1;
+  useUpdateEffect(() => {
+    setFileDataSync(file.data);
+  }, [file]);
 
-//     const newFiles = files.filter(({ id }, index) => {
-//       const shouldRemove = id === searchId;
-//       if (shouldRemove) {
-//         removedId = id;
-//         removedIndex = index;
-//       }
-//       return !shouldRemove;
-//     });
+  return (
+    <AppContext.Provider
+      value={{
+        file,
+        fileDataSync,
+        setFile,
+        setFileByName,
+        setFileDataSync,
+      }}
+      children={props.children}
+    />
+  );
+}
 
-//     if (newFiles.length === 0) {
-//       const file = createFile();
-
-//       setFiles([file]);
-//       setActive(file);
-//     } else {
-//       setFiles(newFiles);
-//       if (removedIndex >= 0 && removedId == active.id) {
-//         if (newFiles.length > removedIndex) {
-//           setActive(newFiles[removedIndex]);
-//         } else {
-//           setActive(newFiles[removedIndex - 1]);
-//         }
-//       }
-//     }
-//   };
-
-//   const updateActiveData = (newData: string) => {
-//     const { data, ...file } = active;
-//     setActive({ ...file, data: newData });
-//   };
-
-//   useUpdateEffect(() => {
-//     updateFileDataById(active.id, active.data);
-//   }, [active.data]);
-
-//   return (
-//     <AppContext.Provider
-//       value={{
-//         files,
-//         active,
-//         addFile,
-//         updateFileDataById,
-//         removeFileById,
-//         setActive,
-//         updateActiveData,
-//       }}
-//       children={props.children}
-//     />
-//   );
-// }
-
-// export type { AppContextType };
-// // export { useAppContext };
-// export default AppProvider;
-export {};
+export type { AppContextType };
+export { useAppContext };
+export default AppProvider;

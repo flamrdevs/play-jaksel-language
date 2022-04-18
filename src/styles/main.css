@@ -17,28 +17,29 @@
 /* Custom GlobalScroll Bar */
 
 ::-webkit-scrollbar {
-  @apply w-2 h-2;
+  @apply w-3;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-opacity-20 bg-neutral-300 rounded-3xl;
-  @apply dark:bg-neutral-600 dark:bg-opacity-20;
+  @apply bg-neutral-300 rounded-3xl;
+  @apply dark:bg-neutral-600;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-neutral-200 hover:bg-neutral-400 rounded-3xl;
-  @apply dark:bg-neutral-700 dark:hover:bg-neutral-500;
+  @apply bg-neutral-400 hover:bg-neutral-500 rounded-3xl;
+  @apply dark:bg-neutral-500 dark:hover:bg-neutral-400;
 }
 
 /* Component */
 
 .play-container {
-  @apply relative container flex flex-col max-w-[128rem] mx-auto w-full h-screen overflow-hidden;
+  @apply container flex flex-col max-w-[128rem] mx-auto w-full h-screen bg-neutral-100 overflow-hidden;
+  @apply dark:bg-neutral-900;
 }
 
 .play-header {
-  @apply flex items-center justify-between pl-3 pr-2 border-2 border-transparent lg:pl-6 lg:pr-4 h-14 bg-neutral-50 shrink-0 border-b-neutral-400;
-  @apply dark:bg-neutral-900 dark:border-b-neutral-500;
+  @apply flex items-center justify-between h-16 pl-6 pr-4 bg-white border-2 border-transparent shrink-0 border-b-primary-400;
+  @apply dark:bg-neutral-800 dark:border-b-primary-500;
 }
 
 .play-header-side {
@@ -50,6 +51,5 @@
 }
 
 .play-main-panel {
-  @apply w-1/2 h-full overflow-auto shrink-0 bg-neutral-50;
-  @apply dark:bg-neutral-900;
+  @apply w-1/2 h-full overflow-auto bg-neutral-100 dark:bg-neutral-800 shrink-0;
 }

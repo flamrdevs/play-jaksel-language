@@ -1,6 +1,6 @@
 import { javascript } from "@codemirror/lang-javascript";
 
-import jakselLanguageTheme from "../jaksel-codemirror/jaksel-language-theme";
+import { jakselLanguageHighlight, jakselLanguageTheme } from "../jaksel-codemirror/jaksel-language-extensions";
 
 import type { SimpleReactCodeMirrorProps } from "../simple-react-codemirror";
 import SimpleReactCodeMirrorDynamic from "../simple-react-codemirror-dynamic";
@@ -14,7 +14,7 @@ function JavaScriptCodeMirror(props: JavaScriptCodeMirrorProps) {
     <SimpleReactCodeMirrorDynamic
       value={value}
       forceUpdate={forceUpdate}
-      extensions={[jakselLanguageTheme(dark), javascript()]}
+      extensions={[jakselLanguageTheme(dark), jakselLanguageHighlight, javascript()]}
       options={options}
       onChange={onChange}
       containerProps={containerProps}

@@ -7,8 +7,8 @@ import Head from "next/head";
 import "~/styles/theme.css";
 import "~/styles/main.css";
 
-import { ThemeProvider, FilesProvider } from "~/components";
-import { getDarkCookie } from "~/components/ThemeProvider/utilities";
+import ThemeProvider, { getDarkCookie } from "~/components/ThemeProvider";
+import AppProvider from "~/components/AppProvider";
 
 type _AppProps = {
   dark: boolean;
@@ -24,9 +24,9 @@ const _App = ({ Component, pageProps, dark }: AppProps & _AppProps) => {
       </Head>
 
       <ThemeProvider dark={dark}>
-        <FilesProvider>
+        <AppProvider>
           <Component {...pageProps} />
-        </FilesProvider>
+        </AppProvider>
       </ThemeProvider>
     </Fragment>
   );

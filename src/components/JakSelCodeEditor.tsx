@@ -1,25 +1,23 @@
+import { useThemeContext } from "~/components/ThemeProvider";
+import { useAppContext } from "~/components/AppProvider";
+
 import JakselCodemirror from "~/libs/jaksel-codemirror";
 import { useRandomValueEffect } from "~/libs/hooks";
 
-import { useThemeContext } from "~/contexts/ThemeContext";
-import { useFilesContext } from "~/contexts/FilesContext";
+type JakSelCodeEditorProps = {};
 
-function JakSelCodeEditor() {
+function JakSelCodeEditor(props: JakSelCodeEditorProps) {
   const { dark } = useThemeContext();
-  const { active, updateActiveFileDataById } = useFilesContext();
+  const { file, setFileDataSync } = useAppContext();
 
-  const forceUpdate = useRandomValueEffect([dark, active.id]);
-
-  const handleChange = (data: string) => {
-    updateActiveFileDataById(active.id, data);
-  };
+  const forceUpdate = useRandomValueEffect([dark, file]);
 
   return (
     <JakselCodemirror
       dark={dark}
-      value={active.data}
+      value={file.data}
       forceUpdate={forceUpdate}
-      onChange={handleChange}
+      onChange={setFileDataSync}
       containerProps={{ className: "w-full h-full" }}
     />
   );

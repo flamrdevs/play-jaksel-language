@@ -1,5 +1,5 @@
 export { default as ThemeProvider } from "./ThemeProvider";
-export { default as FilesProvider } from "./FilesProvider";
+export { default as AppProvider } from "./AppProvider";
 
 export { default as IconButton } from "./IconButton";
 export { default as IconButtonLink } from "./IconButtonLink";

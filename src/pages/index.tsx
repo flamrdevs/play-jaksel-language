@@ -1,60 +1,61 @@
-import { Fragment, useRef } from "react";
+import { Fragment, useCallback, useRef, useState } from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { useBoolean, useIsomorphicLayoutEffect } from "usehooks-ts";
+import { useIsomorphicLayoutEffect } from "usehooks-ts";
 
-import { Cross2Icon, GitHubLogoIcon, InfoCircledIcon, MoonIcon, PlusIcon, SunIcon } from "@radix-ui/react-icons";
+import { FileIcon, GitHubLogoIcon, InfoCircledIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 import dayjs from "dayjs";
 
 import { Container, Header, IconButton, IconButtonLink, JakSelCodeEditor, JavaScriptCodePreview, Main } from "~/components";
 
-import { useThemeContext } from "~/contexts/ThemeContext";
-import { useFilesContext } from "~/contexts/FilesContext";
+import { useThemeContext } from "~/components/ThemeProvider";
+import { useAppContext } from "~/components/AppProvider";
+import { files } from "~/static/files";
 
 const links = {
   github: {
     playJakSelLanguage: "https://github.com/flamrdevs/play-jaksel-language",
     jakSelLanguage: "https://github.com/RioChndr/jaksel-language",
   },
-  home: {
-    jakselLanguage: "https://jaksel-language.vercel.app",
-  },
+};
+
+const Badge = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      className={`px-2 flex justify-center items-center py-0.5 text-xs font-medium border border-primary-500 dark:border-primary-400 text-primary-500 dark:text-primary-400 rounded-full ${className}`}
+      {...props}
+    />
+  );
 };
 
 const LeftSideHeader = () => {
   return (
-    <div className="flex items-center space-x-2">
-      <a
-        href="/"
-        className="flex items-center p-2 space-x-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 rounded-xl"
-      >
-        <img src="/unstable-jaksel-lang-logo.png" className="w-8 h-8 bg-center bg-cover rounded" alt="JakSel Lang Logo" />
-        <span className="self-center hidden text-xl font-bold whitespace-nowrap md:block">
-          {process.env.NEXT_PUBLIC_APP_NAME.toLowerCase()}
-        </span>
-      </a>
+    <a
+      href="/"
+      className="flex items-center p-2 space-x-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 rounded-xl"
+    >
+      <img src="/unstable-jaksel-lang-logo.png" className="w-8 h-8 bg-center bg-cover rounded" alt="JakSel Lang Logo" />
+      <span className="self-center text-xl font-bold whitespace-nowrap">{process.env.NEXT_PUBLIC_APP_NAME.toLowerCase()}</span>
       <div>
-        <div className="px-2 flex justify-center items-center py-0.5 text-xs font-medium border border-primary-500 dark:border-primary-400 text-primary-500 dark:text-primary-400 rounded-full">
-          beta
-        </div>
+        <Badge>beta</Badge>
       </div>
-    </div>
+    </a>
   );
 };
 
 const RightSideHeader = () => {
   const { dark, toggleDark } = useThemeContext();
 
-  const dialog = useBoolean();
+  const [dialog, setDialog] = useState(false);
 
-  let startRef = useRef<HTMLButtonElement | null>(null);
+  let enjoyRef = useRef<HTMLButtonElement | null>(null);
 
   useIsomorphicLayoutEffect(() => {
     const KEY = "jaksel-language-play-dialog";
 
     const reWriteDate = () => {
-      dialog.setTrue();
+      setDialog(true);
       localStorage.setItem(KEY, JSON.stringify(new Date()));
     };
 
@@ -72,42 +73,49 @@ const RightSideHeader = () => {
     }
   }, []);
 
+  const openDialog = () => {
+    setDialog(true);
+  };
+
+  const closeDialog = () => {
+    setDialog(false);
+  };
+
+  const SunOrMoonIcon = useCallback(
+    (props: { className?: string }) => {
+      return dark ? <SunIcon className={props.className} /> : <MoonIcon className={props.className} />;
+    },
+    [dark]
+  );
+
   return (
     <Fragment>
       <div className="flex items-center space-x-2">
-        <div className="hidden lg:block">
+        <div>
           Powered by{" "}
           <a
-            href={links.home.jakselLanguage}
-            rel="noreferrer noopener"
-            target="_blank"
-            className="px-1.5 py-0.5 text-primary-500 dark:text-primary-400 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 rounded-xl"
+            href={links.github.jakSelLanguage}
+            className="px-1.5 py-0.5 text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 rounded-xl"
           >
             jaksel-language@1.0.2
           </a>
         </div>
 
-        {/* <IconButtonLink href={links.github.playJakSelLanguage} rel="noreferrer noopener" target="_blank">
-          <GitHubLogoIcon className="w-5 h-5" />
-        </IconButtonLink> */}
+        <IconButtonLink href={links.github.playJakSelLanguage}>
+          <GitHubLogoIcon className="w-6 h-6" />
+        </IconButtonLink>
 
-        <div>
-          <a href={links.github.playJakSelLanguage} rel="noreferrer noopener" target="_blank">
-            <div className="px-2 flex justify-center items-center py-0.5 text-sm font-medium border border-neutral-500 hover:border-primary-500 dark:border-neutral-400 dark:hover:border-primary-400 text-neutral-500 dark:text-neutral-400 hover:text-primary-500 dark:hover:text-primary-400 rounded-full">
-              Bug Report
-            </div>
-          </a>
-        </div>
-
-        <IconButton onClick={dialog.setTrue}>
-          <InfoCircledIcon className="w-5 h-5" />
+        <IconButton onClick={openDialog}>
+          <InfoCircledIcon className="w-6 h-6" />
         </IconButton>
 
-        <IconButton onClick={toggleDark}>{dark ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}</IconButton>
+        <IconButton onClick={toggleDark}>
+          <SunOrMoonIcon className="w-6 h-6" />
+        </IconButton>
       </div>
 
-      <Transition show={dialog.value} as={Fragment}>
-        <Dialog initialFocus={startRef} onClose={dialog.setFalse} className="fixed inset-0 z-10 overflow-y-auto">
+      <Transition show={dialog} as={Fragment}>
+        <Dialog initialFocus={enjoyRef} onClose={closeDialog} className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen">
             <Transition.Child
               as={Fragment}
@@ -130,43 +138,35 @@ const RightSideHeader = () => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative w-11/12 max-w-xl p-4 mx-auto bg-white border-2 lg:p-6 border-neutral-100 bg-opacity-70 rounded-xl dark:bg-black dark:bg-opacity-50 backdrop-blur-md dark:border-neutral-800">
-                <Dialog.Title className="flex items-center space-x-2">
-                  <span className="flex items-center p-2 space-x-4">
-                    <img src="/unstable-jaksel-lang-logo.png" className="w-8 h-8 bg-center bg-cover rounded" alt="JakSel Lang Logo" />
-                    <span className="self-center hidden text-xl font-bold whitespace-nowrap md:block">
-                      {process.env.NEXT_PUBLIC_APP_NAME.toLowerCase()}
-                    </span>
-                  </span>
-                  <span>
-                    <div className="px-2 flex justify-center items-center py-0.5 text-xs font-medium border border-primary-500 dark:border-primary-400 text-primary-500 dark:text-primary-400 rounded-full">
-                      beta
-                    </div>
-                  </span>
+              <div className="relative w-full max-w-xl p-6 mx-auto my-8 bg-white border-2 border-neutral-100 bg-opacity-70 rounded-xl dark:bg-black dark:bg-opacity-50 backdrop-blur-md dark:border-neutral-800">
+                <Dialog.Title className="flex items-center space-x-4 text-xl font-bold">
+                  <img src="/unstable-jaksel-lang-logo.png" className="w-8 h-8 bg-center bg-cover rounded" alt="JakSel Lang Logo" />
+                  <span>{process.env.NEXT_PUBLIC_APP_NAME.toLowerCase()}</span>
+                  <div>
+                    <Badge>beta</Badge>
+                  </div>
                 </Dialog.Title>
-                <Dialog.Description className="my-4 ml-4 text-base">
-                  <span className="block">Jaksel-lang Online Compiler & Interpreter</span>
-                  <span>
+                <Dialog.Description className="my-4 text-lg">
+                  <div>Jaksel-lang Online Compiler & Interpreter</div>
+                  <div>
                     Powered by{" "}
                     <a
-                      href={links.home.jakselLanguage}
-                      rel="noreferrer noopener"
-                      target="_blank"
-                      className="px-1.5 py-0.5 text-primary-500 hover:underline dark:text-primary-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 rounded-xl"
+                      href={links.github.jakSelLanguage}
+                      className="px-1.5 py-0.5 text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 rounded-xl"
                     >
                       jaksel-language@1.0.2
                     </a>
-                  </span>
+                  </div>
                 </Dialog.Description>
 
                 <div className="flex justify-end mt-8">
                   <button
-                    ref={startRef}
+                    ref={enjoyRef}
                     type="button"
                     className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white transition-colors bg-primary-500 hover:bg-primary-600 dark:hover:bg-primary-400 dark:bg-primary-500 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400"
-                    onClick={dialog.setFalse}
+                    onClick={closeDialog}
                   >
-                    Start
+                    Enjoy
                   </button>
                 </div>
               </div>
@@ -179,54 +179,27 @@ const RightSideHeader = () => {
 };
 
 const LeftPanelMain = () => {
-  const { files, active, addFile, removeFileById, setActiveFileById } = useFilesContext();
+  const { file, setFileByName } = useAppContext();
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="flex w-full gap-3 px-2 py-1 mb-1 overflow-auto font-medium lg:px-4 lg:py-2 shrink-0">
-        {files.map((file) => {
-          const isActive = active.id === file.id;
-
-          const fileName = `${file.name}${file.ext}`;
-
+      <div className="flex w-full gap-3 px-4 py-2 text-lg font-medium shrink-0">
+        {Object.values(files).map((_file) => {
           return (
-            <div
-              key={file.id}
-              className={`relative flex items-center justify-center group shrink-0 transition-colors ${
-                isActive ? "text-neutral-900 dark:text-neutral-50" : "text-neutral-400 dark:text-neutral-500"
+            <button
+              key={_file.name}
+              className={`px-2 shrink-0 flex items-center justify-center gap-2 py-0.5 border-2 border-transparent focus:outline-none ${
+                file.name === _file.name ? "border-b-primary-400 dark:border-b-primary-500" : ""
               }`}
+              onClick={() => {
+                setFileByName(_file.name);
+              }}
             >
-              {isActive && (
-                /* maybe add layout animation (ex: framer-motion) */ <div className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-primary-500 dark:bg-primary-400" />
-              )}
-
-              <button
-                className="flex items-center justify-center pl-2 pr-1 py-0.5 focus:outline-none"
-                onClick={() => {
-                  setActiveFileById(file.id);
-                }}
-              >
-                <span>{fileName}</span>
-              </button>
-              <button
-                className={`pr-1 ${isActive ? "opacity-30" : "opacity-0"} group-hover:opacity-80 focus:outline-none transition-colors`}
-                onClick={() => {
-                  removeFileById(file.id);
-                }}
-              >
-                <Cross2Icon className="w-4 h-4" />
-              </button>
-            </div>
+              <FileIcon className="w-4 h-4" />
+              {_file.name}
+            </button>
           );
         })}
-        <div className="flex items-center justify-center transition-colors group shrink-0 ">
-          <button
-            className="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none opacity-30 group-hover:opacity-80"
-            onClick={addFile}
-          >
-            <PlusIcon className="w-4 h-4" />
-          </button>
-        </div>
       </div>
       <div className="flex-grow w-full overflow-auto">
         <JakSelCodeEditor />
@@ -236,20 +209,15 @@ const LeftPanelMain = () => {
 };
 
 const RightPanelMain = () => {
-  const { active } = useFilesContext();
-
-  const fileName = `${active.name}.js`;
+  const { file } = useAppContext();
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="flex w-full gap-3 px-2 py-1 mb-1 overflow-auto font-medium lg:px-4 lg:py-2 shrink-0">
-        <div className="relative flex items-center justify-center transition-colors group shrink-0 text-neutral-900 dark:text-neutral-50">
-          <div className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-primary-500 dark:bg-primary-400" />
-
-          <div className="flex items-center justify-center pl-2 pr-2 py-0.5 focus:outline-none">
-            <span>{fileName}</span>
-          </div>
-        </div>
+      <div className="flex w-full gap-3 px-4 py-2 text-lg font-medium shrink-0">
+        <button className="px-2 shrink-0 flex items-center justify-center gap-2 py-0.5 border-2 border-transparent border-b-primary-400 dark:border-b-primary-500 focus:outline-none">
+          <FileIcon className="w-4 h-4" />
+          {file.name.replace(/.jaksel/g, ".js")}
+        </button>
       </div>
       <div className="flex-grow w-full overflow-auto">
         <JavaScriptCodePreview />
