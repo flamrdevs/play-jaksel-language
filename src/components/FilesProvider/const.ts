@@ -1,17 +1,13 @@
 import { nanoid } from "nanoid";
 
-type FileType = {
-  id: string;
-  name: string;
-  ext: string;
-  data: string;
-};
+import type { FileType } from "~/contexts/FilesContext";
 
 const FILES: FileType[] = [
   {
     id: nanoid(),
     name: "hello-world",
     ext: ".jaksel",
+    active: true,
     data: `spill "Hello, World!"`,
   },
   {
@@ -24,7 +20,7 @@ spill language`,
   },
   {
     id: nanoid(),
-    name: "another",
+    name: "more",
     ext: ".jaksel",
     data: `trust issue
   spill "Something wrong"
@@ -37,15 +33,4 @@ udahan`,
   },
 ];
 
-const createFile = (): FileType => {
-  return {
-    id: nanoid(),
-    name: "new file",
-    ext: ".jaksel",
-    data: "",
-  };
-};
-
-export type { FileType };
-export { createFile };
-export default FILES;
+export { FILES };

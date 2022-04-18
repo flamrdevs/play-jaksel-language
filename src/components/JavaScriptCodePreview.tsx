@@ -3,32 +3,30 @@ import { useMemo } from "react";
 // import { format } from "prettier/standalone";
 // import babelParser from "prettier/parser-babel";
 
-import { useThemeContext } from "~/components/ThemeProvider";
-import { useAppContext } from "~/components/AppProvider";
-
 import JavascriptCodemirror from "~/libs/javascript-codemirror";
 import { compile } from "~/libs/jaksel-language";
 import { useRandomValueEffect } from "~/libs/hooks";
 
+import { useThemeContext } from "~/contexts/ThemeContext";
+import { useFilesContext } from "~/contexts/FilesContext";
+
 // const formatJavascript = (input: string) => format(input, { parser: "babel", plugins: [babelParser] });
 
-type JavaScriptCodePreviewProps = {};
-
-function JavaScriptCodePreview(props: JavaScriptCodePreviewProps) {
+function JavaScriptCodePreview() {
   const { dark } = useThemeContext();
-  const { file, fileDataSync } = useAppContext();
+  const { active } = useFilesContext();
 
   const compiled = useMemo(() => {
-    const js = compile(fileDataSync);
+    const js = compile(active.data);
     return js;
     // try {
     //   return formatJavascript(js);
     // } catch (error) {
     //   return js;
     // }
-  }, [fileDataSync]);
+  }, [active]);
 
-  const forceUpdate = useRandomValueEffect([dark, file, compiled]);
+  const forceUpdate = useRandomValueEffect([dark, active, compiled]);
 
   return (
     <JavascriptCodemirror
